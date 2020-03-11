@@ -1,1 +1,60 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define mxn 100005
+
+using namespace std;
+
+ll tree[mxn];
+
+int getans(int idx){
+    int ans=0;
+    while(idx>0){
+        ans+= tree[idx];
+        idx-=idx&(-idx);
+    }
+    return ans;
+}
+
+void update(int idx, ll x, int n){
+    while(idx<=n){
+        tree[idx]+=x;
+        idx+=idx&(-idx);
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0), cout.tie(0);
+    int t,cas=0;
+    cin>>t;
+    while(t--){
+        memset(tree,0,sizeof(tree));
+        string s;
+        cin>>s;
+        int n= s.length();
+        printf("Case %d:\n",++cas);
+        int q;
+        cin>>q;
+        while(q--){
+            char type;
+            cin>>type;
+            if(type=='I'){
+                int l,r;
+                cin>>l>>r;
+                update(l,1,n);
+                update(r+1,-1,n);
+            }
+            else{
+                int pos;
+                cin>>pos;
+                int ans;
+                int x= s[pos-1]-'0';
+                ans= getans(pos);
+                printf("%d\n",x^(ans%2));
+            }
+
+        }
+    }
+}
 
