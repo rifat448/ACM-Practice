@@ -1,0 +1,63 @@
+    #include<bits/stdc++.h>
+    #define ll long long
+     
+    using namespace std;
+     
+    int tree[26][200005];
+     
+    int getsum(int i,int j){
+        int sum=0;
+        while(j>0){
+            sum+=tree[i][j];
+            j-=(j&(-j));
+        }
+        return sum;
+    }
+    void update(int i,int j,int x,int n){
+        while(j<=n){
+            tree[i][j]+=x;
+            j+=(j&(-j));
+        }
+    }
+     
+    int Remove(int c,int x,int n){
+        int lb=1,ub=n,ans=0;
+        while(lb<=ub){
+            int mid=(lb+ub)/2;
+            if(getsum(c,mid)>=x){
+                ans=mid;
+                ub=mid-1;
+            }
+            else{
+                lb=mid+1;
+            }
+        }
+        update(c,ans,-1,n);
+        return ans;
+    }
+     
+    int main()
+    {
+        ios_base::sync_with_stdio(false);
+        cin.tie(0), cout.tie(0);
+     
+        string s;
+        cin>>s;
+        int n=s.length();
+        for(int i=0;i<n;i++){
+            update(s[i]-97,i+1,1,n);
+        }
+        int q;
+        cin>>q;
+        while(q--){
+            int k; char c;
+            cin>>k>>c;
+            int pos=Remove(c-97,k,n)-1;
+            s[pos]='0';
+        }
+        string res="";
+        for(int i=0;i<n;i++){
+            if(s[i]!='0') res+=s[i];
+        }
+        cout<<res<<endl;
+    }
